@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.io.File;
 
 /**
  * @Author HustLrz
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ResIdentify {
 
-    private static final String PATH = "res/img/resistor/identify/";
+    private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\identify\\";
     private static int threshold = 170;   //二值化阈值，根据具体情况调整
     private static int morphOpenSizeX = 20;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
@@ -32,6 +33,10 @@ public class ResIdentify {
 
 
     public int resIdentify(Mat src) {
+
+        //删除历史文件
+        File file = new File("F:\\cisc498\\resistor\\res\\img\\identify");
+        deleteFile(file);
 
         //去掉边缘，取中间
         src = src.submat(src.rows() / 4, 3 * src.rows() / 4, src.cols() / 6, 5 * src.cols() / 6);
@@ -238,5 +243,28 @@ public class ResIdentify {
         });
         //System.out.println(mostColor.get());
         return mostColor.get();
+    }
+
+    public static void deleteFile(File file){
+        //判断文件不为null或文件目录存在
+        if (file == null || !file.exists()){
+            int flag = 0;
+            System.out.println("文件删除失败,请检查文件路径是否正确");
+            return;
+        }
+        //取得这个目录下的所有子文件对象
+        File[] files = file.listFiles();
+        //遍历该目录下的文件对象
+        for (File f: files){
+            //打印文件名
+            String name = file.getName();
+            //System.out.println(name);
+            //判断子目录是否存在子目录,如果是文件则删除
+            if (f.isDirectory()){
+                deleteFile(f);
+            }else {
+                f.delete();
+            }
+        }
     }
 }

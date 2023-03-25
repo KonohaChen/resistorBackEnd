@@ -4,13 +4,15 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 
 public class ResLocate {
 
-    private static final String PATH = "res/img/resistor/";
+    private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\resistor\\";
     private static int threshold = 0;           //二值化阈值
     private static int morphOpenSizeX = 20;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
@@ -27,6 +29,11 @@ public class ResLocate {
      * @return
      */
     public List<Mat> resLocate(Mat src,List<RotatedRect> rectLoc) {
+
+        //删除历史文件
+        File file = new File("F:\\cisc498\\resistor\\res\\img\\resistor");
+        deleteFile(file);
+
         List<Mat> resultList = new ArrayList<Mat>();
 
         Mat src_blur = new Mat();
@@ -54,8 +61,8 @@ public class ResLocate {
 
         //开操作消掉部分白色线条和白色斑点
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphOpenSizeX, morphOpenSizeY));
-        Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_OPEN, element);
-        //Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
+        //Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_OPEN, element);
+        Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
         Imgcodecs.imwrite(PATH + "morphology_open.jpg", img_threshold);
 
         //膨胀消除电阻间隔
@@ -167,5 +174,28 @@ public class ResLocate {
         Imgproc.getRectSubPix(src, rect_size, center, img_crop);
         Imgcodecs.imwrite(PATH + "debug_crop_" + index + ".jpg", img_crop);
         return img_crop;
+    }
+
+    public static void deleteFile(File file) {
+        //判断文件不为null或文件目录存在
+        if (file == null || !file.exists()) {
+            int flag = 0;
+            System.out.println("文件删除失败,请检查文件路径是否正确");
+            return;
+        }
+        //取得这个目录下的所有子文件对象
+        File[] files = file.listFiles();
+        //遍历该目录下的文件对象
+        for (File f : files) {
+            //打印文件名
+            String name = file.getName();
+            //System.out.println(name);
+            //判断子目录是否存在子目录,如果是文件则删除
+            if (f.isDirectory()) {
+                deleteFile(f);
+            } else {
+                f.delete();
+            }
+        }
     }
 }

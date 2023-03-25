@@ -7,7 +7,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.List;
 
 public class ImageEdit {
-    private static final String PATH = "res/img/resistor/";
+    private static final String PATH = "res/img/";
     public void addRes(Mat src, List<RotatedRect> rectLoc, List<Double> resistance){
         int font = Core.FONT_HERSHEY_COMPLEX;
         double fontScale = 1.0;

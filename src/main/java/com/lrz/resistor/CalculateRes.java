@@ -28,7 +28,7 @@ public class CalculateRes {
     public double calculateRes(){
         List<String> ringList = new ArrayList<String>();
         for(int i=0;i<10;i++){
-            String path = "res/img/resistor/identify/debug_crop_" + i + ".jpg";
+            String path = "res/img/identify/debug_crop_" + i + ".jpg";
             File file = new File(path);
             if(file.exists()) {
                 Mat src1 = Imgcodecs.imread(path);
