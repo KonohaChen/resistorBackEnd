@@ -14,7 +14,8 @@ public class App {
     static {
         //加载opencv动态链接库
         String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
-        //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
+        //String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java455.dll";
+        //String path = "F:\\cisc498\\47\\opencv\\build\\java\\x64\\opencv_470.dll";
         System.load(path);
     }
 

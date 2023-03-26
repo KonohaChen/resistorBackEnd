@@ -12,13 +12,13 @@ public class ColorExtract {
     static {
         //加载opencv动态链接库
         String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
-        //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
+        //String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java455.dll";
         System.load(path);
     }
 
     public static void main(String[] args) {
         //读取颜色图片，尽量减少输入图片中的干扰像素
-        Mat src = Imgcodecs.imread("res/img/resistor/identify/green.jpg");
+        Mat src = Imgcodecs.imread("C:/Users/19273/Downloads/Resistor/gold.jpg");
         Mat dst = new Mat();
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2HSV);
         List<Double> H = new ArrayList<Double>();

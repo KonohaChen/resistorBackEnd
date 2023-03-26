@@ -14,7 +14,7 @@ public class ResLocate {
 
     private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\resistor\\";
     private static int threshold = 0;           //二值化阈值
-    private static int morphOpenSizeX = 20;     //开操作size
+    private static int morphOpenSizeX = 30;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
     private static int morphDilateSizeX = 17;   //膨胀size
     private static int morphDilateSizeY = 17;   //膨胀size
@@ -56,7 +56,7 @@ public class ResLocate {
         Imgcodecs.imwrite(PATH + "img_threshold.jpg", img_threshold);
 
         //Core.bitwise_not(img_threshold,img_threshold);
-        Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
 
 
         //开操作消掉部分白色线条和白色斑点

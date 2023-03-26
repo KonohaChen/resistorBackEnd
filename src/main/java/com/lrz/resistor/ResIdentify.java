@@ -19,13 +19,13 @@ import java.io.File;
 public class ResIdentify {
 
     private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\identify\\";
-    private static int threshold = 170;   //二值化阈值，根据具体情况调整
-    private static int morphOpenSizeX = 20;     //开操作size
+    private static int threshold = 100;   //二值化阈值，根据具体情况调整
+    private static int morphOpenSiz01 = 20;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
     private static int erodeSizeX0 = 3;
     private static int erodeSizeY0 = 8;   //纵向腐蚀
     private static int erodeSizeX = 5;
-    private static int erodeSizeY = 30;   //纵向腐蚀
+    private static int erodeSizeY = 300;   //纵向腐蚀
 
     //色环BGR值，待测
     private static Scalar[] colorCode = {
@@ -53,7 +53,7 @@ public class ResIdentify {
 
         // 二值化
         Mat img_threshold = new Mat();
-        Imgproc.threshold(src_gray, img_threshold, threshold, 255, Imgproc.THRESH_OTSU);
+        Imgproc.threshold(src_gray, img_threshold, 0, 255, Imgproc.THRESH_OTSU);
 
         Imgcodecs.imwrite(PATH + "threshold.jpg", img_threshold);
 
@@ -67,7 +67,7 @@ public class ResIdentify {
 
         // 纵向腐蚀，连接色环反光断点,腐蚀两次
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(erodeSizeX, erodeSizeY));
-        Imgproc.erode(img_threshold, img_threshold, element, new Point(-1, -1), 2);
+        Imgproc.erode(img_threshold, img_threshold, element, new Point(-1, -1), 1);
 
         Imgcodecs.imwrite(PATH + "MORPH_RECT.jpg", img_threshold);
 
@@ -158,8 +158,7 @@ public class ResIdentify {
         Map colorListResult = new HashMap<String, Integer>();
         colorListResult.put("black",0);
         colorListResult.put("brown",0);
-        colorListResult.put("red1",0);
-        colorListResult.put("red2",0);
+        colorListResult.put("red",0);
         colorListResult.put("orange",0);
         colorListResult.put("yellow",0);
         colorListResult.put("green",0);
@@ -167,6 +166,7 @@ public class ResIdentify {
         colorListResult.put("violet",0);
         colorListResult.put("gray",0);
         colorListResult.put("white",0);
+        //colorListResult.put("gold",0);
         //System.out.println(colorListStd.get("upper_black")[0]);
         for (int i = 0; i < dst.rows(); i++) {
             for (int j = 0; j < dst.cols(); j++) {
@@ -175,21 +175,26 @@ public class ResIdentify {
                 dst.get(i,j)[2]>colorListStd.get("lower_black")[2] && dst.get(i,j)[2]<colorListStd.get("upper_black")[2]){
                     int counter = (Integer) colorListResult.get("black");
                     colorListResult.put("black",counter+=1);
-                }else if (dst.get(i,j)[0]>colorListStd.get("lower_brown")[0] && dst.get(i,j)[0]<colorListStd.get("upper_brown")[0]
-                        && dst.get(i,j)[1]>colorListStd.get("lower_brown")[1] && dst.get(i,j)[1]<colorListStd.get("upper_brown")[1] &&
-                        dst.get(i,j)[2]>colorListStd.get("lower_brown")[2] && dst.get(i,j)[2]<colorListStd.get("upper_brown")[2]){
+                }else if (dst.get(i,j)[0]>colorListStd.get("lower_brown1")[0] && dst.get(i,j)[0]<colorListStd.get("upper_brown1")[0]
+                        && dst.get(i,j)[1]>colorListStd.get("lower_brown1")[1] && dst.get(i,j)[1]<colorListStd.get("upper_brown1")[1] &&
+                        dst.get(i,j)[2]>colorListStd.get("lower_brown1")[2] && dst.get(i,j)[2]<colorListStd.get("upper_brown1")[2]){
+                    int counter = (Integer) colorListResult.get("brown");
+                    colorListResult.put("brown",counter+=1);
+                }else if (dst.get(i,j)[0]>colorListStd.get("lower_brown2")[0] && dst.get(i,j)[0]<colorListStd.get("upper_brown2")[0]
+                        && dst.get(i,j)[1]>colorListStd.get("lower_brown2")[1] && dst.get(i,j)[1]<colorListStd.get("upper_brown2")[1] &&
+                        dst.get(i,j)[2]>colorListStd.get("lower_brown2")[2] && dst.get(i,j)[2]<colorListStd.get("upper_brown2")[2]){
                     int counter = (Integer) colorListResult.get("brown");
                     colorListResult.put("brown",counter+=1);
                 }else if (dst.get(i,j)[0]>colorListStd.get("lower_red1")[0] && dst.get(i,j)[0]<colorListStd.get("upper_red1")[0]
                         && dst.get(i,j)[1]>colorListStd.get("lower_red1")[1] && dst.get(i,j)[1]<colorListStd.get("upper_red1")[1] &&
                         dst.get(i,j)[2]>colorListStd.get("lower_red1")[2] && dst.get(i,j)[2]<colorListStd.get("upper_red1")[2]){
-                    int counter = (Integer) colorListResult.get("red1");
-                    colorListResult.put("red1",counter+=1);
+                    int counter = (Integer) colorListResult.get("red");
+                    colorListResult.put("red",counter+=1);
                 }else if (dst.get(i,j)[0]>colorListStd.get("lower_red2")[0] && dst.get(i,j)[0]<colorListStd.get("upper_red2")[0]
                         && dst.get(i,j)[1]>colorListStd.get("lower_red2")[1] && dst.get(i,j)[1]<colorListStd.get("upper_red2")[1] &&
                         dst.get(i,j)[2]>colorListStd.get("lower_red2")[2] && dst.get(i,j)[2]<colorListStd.get("upper_red2")[2]){
-                    int counter = (Integer) colorListResult.get("red2");
-                    colorListResult.put("red2",counter+=1);
+                    int counter = (Integer) colorListResult.get("red");
+                    colorListResult.put("red",counter+=1);
                 }else if (dst.get(i,j)[0]>colorListStd.get("lower_orange")[0] && dst.get(i,j)[0]<colorListStd.get("upper_orange")[0]
                         && dst.get(i,j)[1]>colorListStd.get("lower_orange")[1] && dst.get(i,j)[1]<colorListStd.get("upper_orange")[1] &&
                         dst.get(i,j)[2]>colorListStd.get("lower_orange")[2] && dst.get(i,j)[2]<colorListStd.get("upper_orange")[2]){
@@ -215,17 +220,22 @@ public class ResIdentify {
                         dst.get(i,j)[2]>colorListStd.get("lower_violet")[2] && dst.get(i,j)[2]<colorListStd.get("upper_violet")[2]){
                     int counter = (Integer) colorListResult.get("violet");
                     colorListResult.put("violet",counter+=1);
+//                }else if (dst.get(i,j)[0]>colorListStd.get("lower_gold")[0] && dst.get(i,j)[0]<colorListStd.get("upper_gold")[0]
+//                        && dst.get(i,j)[1]>colorListStd.get("lower_gold")[1] && dst.get(i,j)[1]<colorListStd.get("upper_gold")[1] &&
+//                        dst.get(i,j)[2]>colorListStd.get("lower_gold")[2] && dst.get(i,j)[2]<colorListStd.get("upper_gold")[2]){
+//                    int counter = (Integer) colorListResult.get("gold");
+//                    colorListResult.put("gold",counter+=1);
                     //gray and white still nee
-//                }else if (dst.get(i,j)[0]>colorListStd.get("lower_gray")[0] && dst.get(i,j)[0]<colorListStd.get("upper_gray")[0]
-//                        && dst.get(i,j)[1]>colorListStd.get("lower_gray")[1] && dst.get(i,j)[1]<colorListStd.get("upper_gray")[1] &&
-//                        dst.get(i,j)[2]>colorListStd.get("lower_gray")[2] && dst.get(i,j)[2]<colorListStd.get("upper_gray")[2]){
-//                    int counter = (Integer) colorListResult.get("gray");
-//                    colorListResult.put("gray",counter+=1);
-//                }else if (dst.get(i,j)[0]>colorListStd.get("lower_white")[0] && dst.get(i,j)[0]<colorListStd.get("upper_white")[0]
-//                        && dst.get(i,j)[1]>colorListStd.get("lower_white")[1] && dst.get(i,j)[1]<colorListStd.get("upper_white")[1] &&
-//                        dst.get(i,j)[2]>colorListStd.get("lower_white")[2] && dst.get(i,j)[2]<colorListStd.get("upper_white")[2]){
-//                    int counter = (Integer) colorListResult.get("white");
-//                    colorListResult.put("white",counter+=1);
+                }else if (dst.get(i,j)[0]>colorListStd.get("lower_gray")[0] && dst.get(i,j)[0]<colorListStd.get("upper_gray")[0]
+                        && dst.get(i,j)[1]>colorListStd.get("lower_gray")[1] && dst.get(i,j)[1]<colorListStd.get("upper_gray")[1] &&
+                        dst.get(i,j)[2]>colorListStd.get("lower_gray")[2] && dst.get(i,j)[2]<colorListStd.get("upper_gray")[2]){
+                    int counter = (Integer) colorListResult.get("gray");
+                    colorListResult.put("gray",counter+=1);
+                }else if (dst.get(i,j)[0]>colorListStd.get("lower_white")[0] && dst.get(i,j)[0]<colorListStd.get("upper_white")[0]
+                        && dst.get(i,j)[1]>colorListStd.get("lower_white")[1] && dst.get(i,j)[1]<colorListStd.get("upper_white")[1] &&
+                        dst.get(i,j)[2]>colorListStd.get("lower_white")[2] && dst.get(i,j)[2]<colorListStd.get("upper_white")[2]){
+                    int counter = (Integer) colorListResult.get("white");
+                    colorListResult.put("white",counter+=1);
                 }
 
             }
@@ -241,6 +251,10 @@ public class ResIdentify {
                 mostColorNum.set((Integer) value);
             }
         });
+        System.out.println("value");
+        System.out.println(colorListResult.get("yellow"));
+        System.out.println(colorListResult.get("orange"));
+        System.out.println(colorListResult.get("white"));
         //System.out.println(mostColor.get());
         return mostColor.get();
     }

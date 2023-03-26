@@ -49,7 +49,7 @@ public class CalculateRes {
             return 0;
         }else if(color == "brown"){
             return 1;
-        }else if(color == "red1" || color == "red2"){
+        }else if(color == "red"){
             return 2;
         }else if(color == "orange"){
             return 3;
@@ -75,7 +75,7 @@ public class CalculateRes {
             return 1;
         }else if(color == "brown"){
             return 10;
-        }else if(color == "red1" || color == "red2"){
+        }else if(color == "red"){
             return 100;
         }else if(color == "orange"){
             return 1000;
