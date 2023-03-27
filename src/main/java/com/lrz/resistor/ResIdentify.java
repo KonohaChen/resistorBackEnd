@@ -18,7 +18,7 @@ import java.io.File;
  */
 public class ResIdentify {
 
-    private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\identify\\";
+    private static final String PATH = "\\res\\img\\identify\\";
     private static int threshold = 100;   //二值化阈值，根据具体情况调整
     private static int morphOpenSiz01 = 20;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
@@ -35,7 +35,7 @@ public class ResIdentify {
     public int resIdentify(Mat src) {
 
         //删除历史文件
-        File file = new File("F:\\cisc498\\resistor\\res\\img\\identify");
+        File file = new File("\\res\\img\\identify");
         deleteFile(file);
 
         //去掉边缘，取中间
