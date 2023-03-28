@@ -7,7 +7,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.List;
 
 public class ImageEdit {
-    private static final String PATH = "res/img/";
+    private static final String PATH = "../src/res_img/edited.png";
     public void addRes(Mat src, List<RotatedRect> rectLoc, List<Double> resistance){
         int font = Core.FONT_HERSHEY_COMPLEX;
         double fontScale = 1.0;
@@ -21,6 +21,6 @@ public class ImageEdit {
             //Imgproc.putText(src,String.valueOf(resistance.get(i)),pt,font, fontScale, color, thickness);
             Imgproc.putText(src,String.valueOf(resistance.get(i)),pt,font, fontScale, color, thickness);
         }
-        Imgcodecs.imwrite(PATH + "edited.jpg", src);
+        Imgcodecs.imwrite(PATH, src);
     }
 }

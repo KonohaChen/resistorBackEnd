@@ -29,7 +29,6 @@ public class ResLocate {
      * @return
      */
     public List<Mat> resLocate(Mat src,List<RotatedRect> rectLoc) {
-
         //删除历史文件
         File file = new File(System.getProperty("user.dir") + "\\res\\img\\resistor");
         DeleteFile.deleteFile(file);
@@ -38,6 +37,8 @@ public class ResLocate {
 
         Mat src_blur = new Mat();
         Mat src_gray = new Mat();
+
+        Imgcodecs.imwrite(PATH + "src.jpg", src);
 
         //高斯模糊
         Imgproc.GaussianBlur(src, src_blur, new Size(5, 5), 0, 0, 4);

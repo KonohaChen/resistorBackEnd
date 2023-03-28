@@ -1,10 +1,10 @@
 package com.lrz;
 
-import com.lrz.missparts.MissParts;
 import com.lrz.resistor.*;
 import org.opencv.core.Mat;
 import org.opencv.core.RotatedRect;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.core.CvType;
 
 import java.util.ArrayList;
@@ -63,15 +63,6 @@ public class App {
             String dataURL = imageUploadRequest.getDataURL();
             BufferedImage image = dataURLToBufferedImage(dataURL);
             Mat mat = BufferedImageToMat(image);
-            String userHome = System.getProperty("user.home");
-            File desktopFolder = new File(userHome, "Desktop");
-            File inputFile = new File(desktopFolder, "input.png");
-            try {
-                ImageIO.write(image, "png", inputFile);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
             GetResult getResult = new GetResult();
             Mat processedMat = getResult.getResult(mat); // Update this method to return a BufferedImage
             BufferedImage processedImage = matToBufferedImage(processedMat);
