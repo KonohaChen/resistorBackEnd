@@ -15,7 +15,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.opencv:opencv:3.2.0">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../opencv/build/java/opencv-320.jar!/" />
+          <root url="jar://F:/cisc498/opencv/build/java/opencv-320.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

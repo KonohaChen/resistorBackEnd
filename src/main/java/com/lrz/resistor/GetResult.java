@@ -11,8 +11,13 @@ import java.io.File;
 public class GetResult {
     static {
         //加载opencv动态链接库
+<<<<<<< HEAD
         String path = "C:\\Users\\20595\\Downloads\\opencv\\build\\java\\x64\\opencv_java320.dll";
         //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
+=======
+        String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
+        //String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java455.dll";
+>>>>>>> abf2cb0de8f24f4b8024a888e85d4a6b0e5be5cf
         System.load(path);
     }
     public Mat getResult(Mat image){
