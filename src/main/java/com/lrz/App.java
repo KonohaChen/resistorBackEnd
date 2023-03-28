@@ -33,14 +33,7 @@ public class App {
 
     static {
         //加载opencv动态链接库
-<<<<<<< HEAD
-        String path = "C:\\Users\\20595\\Downloads\\opencv\\build\\java\\x64\\opencv_java320.dll";
-        //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
-=======
-        String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
-        //String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java455.dll";
-        //String path = "F:\\cisc498\\47\\opencv\\build\\java\\x64\\opencv_470.dll";
->>>>>>> abf2cb0de8f24f4b8024a888e85d4a6b0e5be5cf
+        String path = System.getProperty("user.dir") + "\\opencv\\build\\java\\x64\\opencv_java320.dll";
         System.load(path);
     }
 
@@ -144,34 +137,3 @@ public class App {
 }
 
 
-
-//        Mat image = Imgcodecs.imread("res\\img\\180r.jpg");
-//        //定位电阻
-//        List<RotatedRect> rectLoc = new ArrayList<>();
-//        ResLocate resLocate = new ResLocate();
-//        resLocate.resLocate(image,rectLoc);
-//        System.out.println(rectLoc);
-//
-//        //定位色环
-//        Mat resistor = Imgcodecs.imread("res\\img\\resistor/debug_crop_0.jpg");
-//        ResIdentify resIdentify = new ResIdentify();
-//        resIdentify.resIdentify(resistor);
-
-        //识别色环颜色
-//        Mat src1 = Imgcodecs.imread("res/img/resistor/identify/debug_crop_0.jpg");
-//        resIdentify.getColor(src1);
-
-        //System.out.println(CalculateRes.calculateRes());
-
-        //计算定位电阻阻值
-//        CalculateRes calculateRes = new CalculateRes();
-//        List<Double> resistance = new ArrayList<>();
-//        resistance = calculateRes.calculateAllRes();
-//
-//        //编辑图片
-//        ImageEdit imageEdit = new ImageEdit();
-//        Mat origin = Imgcodecs.imread("res\\img\\resistor\\originWithContour.jpg");
-//        imageEdit.addRes(origin,rectLoc,resistance);
-
-//        SVMTrain svm = new SVMTrain();
-//        svm

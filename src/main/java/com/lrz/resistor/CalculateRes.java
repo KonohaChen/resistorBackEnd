@@ -39,7 +39,7 @@ public class CalculateRes {
         System.out.println(ringList);
         //four-ring Res
         if(ringList.size()==4){
-            return ((color2Num(ringList.get(0))*10+color2Num(ringList.get(1)))*color2Multiplier(ringList.get(2)));
+            return ((color2Num(ringList.get(3))*10+color2Num(ringList.get(2)))*color2Multiplier(ringList.get(1)));
         }else{
             return -1;
         }

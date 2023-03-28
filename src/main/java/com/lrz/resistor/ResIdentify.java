@@ -18,25 +18,19 @@ import java.io.File;
  */
 public class ResIdentify {
 
-    private static final String PATH = "\\res\\img\\identify\\";
-    private static int threshold = 100;   //二值化阈值，根据具体情况调整
-    private static int morphOpenSiz01 = 20;     //开操作size
-    private static int morphOpenSizeY = 20;     //开操作size
+    private static final String PATH = System.getProperty("user.dir") + "\\res\\img\\identify\\";
     private static int erodeSizeX0 = 3;
     private static int erodeSizeY0 = 8;   //纵向腐蚀
     private static int erodeSizeX = 5;
     private static int erodeSizeY = 300;   //纵向腐蚀
 
-    //色环BGR值，待测
-    private static Scalar[] colorCode = {
-    };
 
 
     public int resIdentify(Mat src) {
 
         //删除历史文件
-        File file = new File("\\res\\img\\identify");
-        deleteFile(file);
+        File file = new File(System.getProperty("user.dir") + "\\res\\img\\identify");
+        DeleteFile.deleteFile(file);
 
         //去掉边缘，取中间
         src = src.submat(src.rows() / 4, 3 * src.rows() / 4, src.cols() / 6, 5 * src.cols() / 6);
@@ -44,10 +38,16 @@ public class ResIdentify {
         // 高斯模糊
         Mat src_blur = new Mat();
         Imgproc.GaussianBlur(src, src_blur, new Size(5, 5), 0, 0, 4);
+        Imgcodecs.imwrite(PATH +"Blur.jpg", src_blur);
+
+        //中值滤波
+        Mat src_medblur = new Mat();
+        Imgproc.medianBlur(src_blur, src_medblur, 3);
+        Imgcodecs.imwrite(PATH +"medianBlur.jpg", src_medblur);
 
         // 灰度化
         Mat src_gray = new Mat();
-        Imgproc.cvtColor(src, src_gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(src_medblur, src_gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgcodecs.imwrite(PATH + "gray.jpg", src_gray);
 
@@ -172,7 +172,7 @@ public class ResIdentify {
             for (int j = 0; j < dst.cols(); j++) {
                 if (dst.get(i,j)[0]>colorListStd.get("lower_black")[0] && dst.get(i,j)[0]<colorListStd.get("upper_black")[0]
                         && dst.get(i,j)[1]>colorListStd.get("lower_black")[1] && dst.get(i,j)[1]<colorListStd.get("upper_black")[1] &&
-                dst.get(i,j)[2]>colorListStd.get("lower_black")[2] && dst.get(i,j)[2]<colorListStd.get("upper_black")[2]){
+                        dst.get(i,j)[2]>colorListStd.get("lower_black")[2] && dst.get(i,j)[2]<colorListStd.get("upper_black")[2]){
                     int counter = (Integer) colorListResult.get("black");
                     colorListResult.put("black",counter+=1);
                 }else if (dst.get(i,j)[0]>colorListStd.get("lower_brown1")[0] && dst.get(i,j)[0]<colorListStd.get("upper_brown1")[0]
@@ -251,34 +251,14 @@ public class ResIdentify {
                 mostColorNum.set((Integer) value);
             }
         });
-        System.out.println("value");
-        System.out.println(colorListResult.get("yellow"));
-        System.out.println(colorListResult.get("orange"));
-        System.out.println(colorListResult.get("white"));
+        //System.out.println("value");
+        //System.out.println(colorListResult.get("red"));
+        //System.out.println(colorListResult.get("brown"));
+        //System.out.println(colorListResult.get("white"));
+        //System.out.println(colorListResult.get("orange"));
         //System.out.println(mostColor.get());
         return mostColor.get();
     }
 
-    public static void deleteFile(File file){
-        //判断文件不为null或文件目录存在
-        if (file == null || !file.exists()){
-            int flag = 0;
-            System.out.println("文件删除失败,请检查文件路径是否正确");
-            return;
-        }
-        //取得这个目录下的所有子文件对象
-        File[] files = file.listFiles();
-        //遍历该目录下的文件对象
-        for (File f: files){
-            //打印文件名
-            String name = file.getName();
-            //System.out.println(name);
-            //判断子目录是否存在子目录,如果是文件则删除
-            if (f.isDirectory()){
-                deleteFile(f);
-            }else {
-                f.delete();
-            }
-        }
-    }
+
 }
