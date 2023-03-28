@@ -11,8 +11,8 @@ import java.util.List;
 public class ColorExtract {
     static {
         //加载opencv动态链接库
-        String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
-        //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
+        //String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
+        String path = "C:\\Users\\20595\\Downloads\\opencv\\build\\java\\x64\\opencv_java320.dll";
         System.load(path);
     }
 

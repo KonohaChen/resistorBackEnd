@@ -6,16 +6,16 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.image.BufferedImage;
 import java.io.File;
 public class GetResult {
     static {
         //加载opencv动态链接库
-        String path = "F:\\cisc498\\opencv\\build\\java\\x64\\opencv_java320.dll";
+        String path = "C:\\Users\\20595\\Downloads\\opencv\\build\\java\\x64\\opencv_java320.dll";
         //String path = "F:\\opencv\\build\\java\\x64\\opencv_java455.dll";
         System.load(path);
     }
-    public void getResult(String path){
-        Mat image = Imgcodecs.imread(path);
+    public Mat getResult(Mat image){
         //定位电阻
         List<RotatedRect> rectLoc = new ArrayList<>();
         ResLocate resLocate = new ResLocate();
@@ -27,7 +27,8 @@ public class GetResult {
 
         //编辑图片
         ImageEdit imageEdit = new ImageEdit();
-        Mat origin = Imgcodecs.imread("res\\img\\resistor\\originWithContour.jpg");
-        imageEdit.addRes(origin,rectLoc,resistance);
+        imageEdit.addRes(image,rectLoc,resistance);
+
+        return image;
     }
 }

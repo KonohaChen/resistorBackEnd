@@ -12,7 +12,7 @@ import java.io.File;
 
 public class ResLocate {
 
-    private static final String PATH = "F:\\cisc498\\resistor\\res\\img\\resistor\\";
+    private static final String PATH = "C:\\Users\\20595\\Downloads\\opencv\\build\\java\\x64\\opencv_java320.dll";
     private static int threshold = 0;           //二值化阈值
     private static int morphOpenSizeX = 20;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
