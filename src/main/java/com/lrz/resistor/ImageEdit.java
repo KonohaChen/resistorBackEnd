@@ -10,9 +10,9 @@ public class ImageEdit {
     private static final String PATH = "../src/res_img/edited.png";
     public void addRes(Mat src, List<RotatedRect> rectLoc, List<Double> resistance){
         int font = Core.FONT_HERSHEY_COMPLEX;
-        double fontScale = 1.0;
-        Scalar color = new Scalar(255, 0, 255);
-        int thickness = 3;
+        double fontScale = 1.5;
+        Scalar color = new Scalar(255, 255, 255);
+        int thickness = 4;
         for(int i=0;i<rectLoc.size();i++){
             Point[] rect_points = new Point[4];
             rectLoc.get(i).points(rect_points);
