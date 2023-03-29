@@ -56,7 +56,7 @@ public class App {
 
     @RestController
     @RequestMapping("/api")
-    @CrossOrigin(origins="http://localhost:3000")
+    @CrossOrigin(origins="http://142.189.244.40:8080/")
     class UploadController {
         @PostMapping("/upload")
         public ResponseEntity<String> uploadImage(@RequestBody ImageUploadRequest imageUploadRequest) {

@@ -22,9 +22,11 @@ public class CalculateRes {
             if(file.exists()) {
                 Mat src1 = Imgcodecs.imread(path);
                 resIdentify.resIdentify(src1,iteration);
-                while(fifthRing.exists()||!fourthRing.exists()){
+                int x = 0;
+                while((fifthRing.exists()||!fourthRing.exists())&&x<10){
                     iteration+=1;
                     resIdentify.resIdentify(src1,iteration);
+                    x++;
                 }
                 resResult.add(calculateRes());
             }

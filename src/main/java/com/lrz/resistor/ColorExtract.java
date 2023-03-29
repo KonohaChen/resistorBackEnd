@@ -105,8 +105,8 @@ public class ColorExtract {
                 removeIndex.add(i);
             }
         }
-        for (int i = removeIndex.size() - 1; i >= 0; i--) {
-            inputList.remove((int) removeIndex.get(i));
+        for (int i = 0; i < removeIndex.size(); i++) {
+            inputList.remove(removeIndex.get(i));
         }
         return inputList;
     }

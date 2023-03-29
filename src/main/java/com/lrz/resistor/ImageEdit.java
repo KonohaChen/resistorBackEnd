@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ImageEdit {
     private static final String PATH = "../src/res_img/edited.png";
-    public void addRes(Mat src, List<RotatedRect> rectLoc, List<Double> resistance){
+    public Mat addRes(Mat src, List<RotatedRect> rectLoc, List<Double> resistance){
         int font = Core.FONT_HERSHEY_COMPLEX;
         double fontScale = 1.5;
         Scalar color_word = new Scalar(0, 0, 0);
@@ -24,5 +24,6 @@ public class ImageEdit {
             Imgproc.putText(src,String.valueOf(resistance.get(i))+" ohm",pt,font, fontScale, color_word, thickness);
         }
         Imgcodecs.imwrite(PATH , src);
+        return src;
     }
 }

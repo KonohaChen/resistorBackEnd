@@ -258,8 +258,8 @@ public class ResIdentify {
         });
 //        System.out.println("value");
 //        System.out.println(colorListResult.get("yellow"));
-        System.out.println(colorListResult.get("red"));
-        System.out.println(colorListResult.get("white"));
+        //System.out.println(colorListResult.get("red"));
+        //System.out.println(colorListResult.get("white"));
         //System.out.println(mostColor.get());
         return mostColor.get();
     }
