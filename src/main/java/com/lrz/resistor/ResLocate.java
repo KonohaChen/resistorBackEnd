@@ -7,17 +7,15 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 
 
 public class ResLocate {
 
     private static final String PATH = System.getProperty("user.dir") + "\\res\\img\\resistor\\";
-    private static int threshold = 0;           //二值化阈值
     private static int morphOpenSizeX = 30;     //开操作size
     private static int morphOpenSizeY = 20;     //开操作size
-    private static int morphDilateSizeX = 40;   //膨胀size
-    private static int morphDilateSizeY = 40;   //膨胀size
+    private static int morphDilateSizeX = 45;   //膨胀size
+    private static int morphDilateSizeY = 45;   //膨胀size
     private static int verifyArea = 8000;       //符合要求的矩形块最小面积
 
 
@@ -29,6 +27,7 @@ public class ResLocate {
      * @return
      */
     public List<Mat> resLocate(Mat src,List<RotatedRect> rectLoc) {
+
         //删除历史文件
         File file = new File(System.getProperty("user.dir") + "\\res\\img\\resistor");
         DeleteFile.deleteFile(file);
@@ -37,22 +36,23 @@ public class ResLocate {
 
         Mat src_blur = new Mat();
         Mat src_gray = new Mat();
+        Mat src_medblur = new Mat();
 
-        Imgcodecs.imwrite(PATH + "src.jpg", src);
+        //中值滤波
+        Imgproc.medianBlur(src, src_medblur, 3);
+        Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
 
         //高斯模糊
-        Imgproc.GaussianBlur(src, src_blur, new Size(5, 5), 0, 0, 4);
-
+        Imgproc.GaussianBlur(src_medblur, src_blur, new Size(5, 5), 0, 0, 4);
         Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
 
         //灰度化
-        Imgproc.cvtColor(src, src_gray, Imgproc.COLOR_BGR2GRAY);
-
+        Imgproc.cvtColor(src_blur, src_gray, Imgproc.COLOR_BGR2GRAY);
         Imgcodecs.imwrite(PATH + "src_gray.jpg", src_gray);
 
         //二值化
         Mat img_threshold = new Mat();
-        Imgproc.threshold(src_gray, img_threshold, threshold, 255, Imgproc.THRESH_OTSU);
+        Imgproc.threshold(src_gray, img_threshold, 0, 255, Imgproc.THRESH_OTSU);
 
         Imgcodecs.imwrite(PATH + "img_threshold.jpg", img_threshold);
 
@@ -62,8 +62,8 @@ public class ResLocate {
 
         //开操作消掉部分白色线条和白色斑点
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphOpenSizeX, morphOpenSizeY));
-        //Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_OPEN, element);
-        Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
+        Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_OPEN, element);
+        //Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
         Imgcodecs.imwrite(PATH + "morphology_open.jpg", img_threshold);
 
         //膨胀消除电阻间隔
