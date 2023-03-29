@@ -24,9 +24,12 @@ public class ResIdentify {
     private static int erodeSizeX = 5;
     private static int erodeSizeY = 300;   //纵向腐蚀
 
+    //色环BGR值，待测
+    private static Scalar[] colorCode = {
+    };
 
 
-    public int resIdentify(Mat src) {
+    public int resIdentify(Mat src,int iteration) {
 
         //删除历史文件
         File file = new File(System.getProperty("user.dir") + "\\res\\img\\identify");
@@ -35,21 +38,23 @@ public class ResIdentify {
         //去掉边缘，取中间
         src = src.submat(src.rows() / 4, 3 * src.rows() / 4, src.cols() / 6, 5 * src.cols() / 6);
 
-        // 高斯模糊
-        Mat src_blur = new Mat();
-        Imgproc.GaussianBlur(src, src_blur, new Size(5, 5), 0, 0, 4);
-        Imgcodecs.imwrite(PATH +"Blur.jpg", src_blur);
-
         //中值滤波
         Mat src_medblur = new Mat();
-        Imgproc.medianBlur(src_blur, src_medblur, 3);
-        Imgcodecs.imwrite(PATH +"medianBlur.jpg", src_medblur);
+        Imgproc.medianBlur(src, src_medblur, 3);
+        Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
+
+        // 高斯模糊
+        Mat src_blur = new Mat();
+        Imgproc.GaussianBlur(src_medblur, src_blur, new Size(5, 5), 0, 0, 4);
+        Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
+
 
         // 灰度化
         Mat src_gray = new Mat();
-        Imgproc.cvtColor(src_medblur, src_gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(src_blur, src_gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgcodecs.imwrite(PATH + "gray.jpg", src_gray);
+
 
         // 二值化
         Mat img_threshold = new Mat();
@@ -60,7 +65,7 @@ public class ResIdentify {
         //尝试消除阴影导致的误判
         Core.bitwise_not(img_threshold, img_threshold);
         Mat element0 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(erodeSizeX0, erodeSizeY0));
-        Imgproc.erode(img_threshold, img_threshold, element0, new Point(-1, -1), 1);
+        Imgproc.erode(img_threshold, img_threshold, element0, new Point(-1, -1), iteration);
         Core.bitwise_not(img_threshold, img_threshold);
 
         Imgcodecs.imwrite(PATH + "threshold0.jpg", img_threshold);
@@ -172,7 +177,7 @@ public class ResIdentify {
             for (int j = 0; j < dst.cols(); j++) {
                 if (dst.get(i,j)[0]>colorListStd.get("lower_black")[0] && dst.get(i,j)[0]<colorListStd.get("upper_black")[0]
                         && dst.get(i,j)[1]>colorListStd.get("lower_black")[1] && dst.get(i,j)[1]<colorListStd.get("upper_black")[1] &&
-                        dst.get(i,j)[2]>colorListStd.get("lower_black")[2] && dst.get(i,j)[2]<colorListStd.get("upper_black")[2]){
+                dst.get(i,j)[2]>colorListStd.get("lower_black")[2] && dst.get(i,j)[2]<colorListStd.get("upper_black")[2]){
                     int counter = (Integer) colorListResult.get("black");
                     colorListResult.put("black",counter+=1);
                 }else if (dst.get(i,j)[0]>colorListStd.get("lower_brown1")[0] && dst.get(i,j)[0]<colorListStd.get("upper_brown1")[0]
@@ -251,14 +256,12 @@ public class ResIdentify {
                 mostColorNum.set((Integer) value);
             }
         });
-        //System.out.println("value");
-        //System.out.println(colorListResult.get("red"));
-        //System.out.println(colorListResult.get("brown"));
-        //System.out.println(colorListResult.get("white"));
-        //System.out.println(colorListResult.get("orange"));
+//        System.out.println("value");
+//        System.out.println(colorListResult.get("yellow"));
+        System.out.println(colorListResult.get("red"));
+        System.out.println(colorListResult.get("white"));
         //System.out.println(mostColor.get());
         return mostColor.get();
     }
-
 
 }
