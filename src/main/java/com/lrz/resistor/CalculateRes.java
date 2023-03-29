@@ -11,14 +11,21 @@ import java.util.List;
 
 public class CalculateRes {
     public List<Double> calculateAllRes(){
+        int iteration = 1;
         List<Double> resResult = new ArrayList<Double>();
         ResIdentify resIdentify = new ResIdentify();
         for(int i=0;i<10;i++){
             String path = "res/img/resistor/debug_crop_" + i + ".jpg";
             File file = new File(path);
+            File fourthRing = new File(System.getProperty("user.dir") + "\\res\\img\\identify\\debug_crop_3.jpg");
+            File fifthRing = new File(System.getProperty("user.dir") + "\\res\\img\\identify\\debug_crop_4.jpg");
             if(file.exists()) {
                 Mat src1 = Imgcodecs.imread(path);
-                resIdentify.resIdentify(src1);
+                resIdentify.resIdentify(src1,iteration);
+                while(fifthRing.exists()||!fourthRing.exists()){
+                    iteration+=1;
+                    resIdentify.resIdentify(src1,iteration);
+                }
                 resResult.add(calculateRes());
             }
         }
