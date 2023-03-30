@@ -56,7 +56,7 @@ public class App {
 
     @RestController
     @RequestMapping("/api")
-    @CrossOrigin(origins="http://142.189.244.40:8080/")
+    @CrossOrigin(origins="http://142.189.244.40/")
     class UploadController {
         @PostMapping("/upload")
         public ResponseEntity<String> uploadImage(@RequestBody ImageUploadRequest imageUploadRequest) {
@@ -115,11 +115,11 @@ public class App {
     public static String bufferedImageToDataURL(BufferedImage image){
         try{
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", bos);
+        ImageIO.write(image, "jpeg", bos);
         byte[] imageBytes = bos.toByteArray();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         bos.close();
-        return "data:image/png;base64," + base64Image;
+        return "data:image/jpeg;base64," + base64Image;
         } catch (IOException e){
             e.printStackTrace();
             return null;

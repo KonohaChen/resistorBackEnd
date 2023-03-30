@@ -112,6 +112,7 @@ public class ResLocate {
                 Imgproc.line(img_threshold, pt1, pt2, new Scalar(255, 0, 255, 255), 4, 8, 0);
             }
 
+
             //在原图上绘制轮廓
             for (int j = 0; j < 4; j++) {
                 Point pt1 = new Point(rect_points[j].x, rect_points[j].y);

@@ -2,7 +2,7 @@
 
 
 Environment：
-- JDK8
+- JDK17
 - SpringBoot
 - OpenCV 3.2
 
