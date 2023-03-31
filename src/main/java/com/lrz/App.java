@@ -6,6 +6,8 @@ import org.opencv.core.RotatedRect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.CvType;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +96,28 @@ public class App {
         Mat mat = new Mat(img.getHeight(), img.getWidth(), type);
         byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         mat.put(0, 0, data);
+        mat = compressMat(mat);
         return mat;
     }
 
+    public static Mat compressMat(Mat mat) {
+        MatOfByte matOfByte = new MatOfByte();
+        Imgcodecs.imencode(".jpeg", mat, matOfByte);
+
+        // Reduce the JPEG quality until the size is less than 1MB
+        int quality = 100;
+        while (matOfByte.toArray().length > 300000 && quality > 0) {
+            matOfByte = new MatOfByte();
+            MatOfInt params = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, quality);
+            Imgcodecs.imencode(".jpeg", mat, matOfByte, params);
+            quality -= 10;
+        }
+
+        byte[] byteArray = matOfByte.toArray();
+        Mat resizedMat = Imgcodecs.imdecode(new MatOfByte(byteArray), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
+        return resizedMat;
+    }
+    
 
     public static BufferedImage matToBufferedImage(Mat mat){
         int type = BufferedImage.TYPE_BYTE_GRAY;
