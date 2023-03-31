@@ -21,8 +21,8 @@ public class ResIdentify {
     private static final String PATH = System.getProperty("user.dir") + "\\res\\img\\identify\\";
     private static int erodeSizeX0 = 3;
     private static int erodeSizeY0 = 8;   //纵向腐蚀
-    private static int erodeSizeX = 5;
-    private static int erodeSizeY = 300;   //纵向腐蚀
+    private static int erodeSizeX = 4;
+    private static int erodeSizeY = 1000;   //纵向腐蚀
 
     //色环BGR值，待测
     private static Scalar[] colorCode = {
