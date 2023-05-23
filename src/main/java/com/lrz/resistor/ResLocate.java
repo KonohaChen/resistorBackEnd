@@ -40,21 +40,21 @@ public class ResLocate {
 
         //中值滤波
         Imgproc.medianBlur(src, src_medblur, 3);
-        Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
+        //Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
 
         //高斯模糊
         Imgproc.GaussianBlur(src_medblur, src_blur, new Size(5, 5), 0, 0, 4);
-        Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
+        //Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
 
         //灰度化
         Imgproc.cvtColor(src_blur, src_gray, Imgproc.COLOR_BGR2GRAY);
-        Imgcodecs.imwrite(PATH + "src_gray.jpg", src_gray);
+        //Imgcodecs.imwrite(PATH + "src_gray.jpg", src_gray);
 
         //二值化
         Mat img_threshold = new Mat();
         Imgproc.threshold(src_gray, img_threshold, 0, 255, Imgproc.THRESH_OTSU);
 
-        Imgcodecs.imwrite(PATH + "img_threshold.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "img_threshold.jpg", img_threshold);
 
         //Core.bitwise_not(img_threshold,img_threshold);
         //Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
@@ -64,13 +64,13 @@ public class ResLocate {
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphOpenSizeX, morphOpenSizeY));
         Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_OPEN, element);
         //Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_CLOSE, element);
-        Imgcodecs.imwrite(PATH + "morphology_open.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "morphology_open.jpg", img_threshold);
 
         //膨胀消除电阻间隔
         element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphDilateSizeX, morphDilateSizeY));
         Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_DILATE, element);
 
-        Imgcodecs.imwrite(PATH + "morphology_dilate.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "morphology_dilate.jpg", img_threshold);
 
         //求所有轮廓
         Mat hierarchy = new Mat();
@@ -82,7 +82,7 @@ public class ResLocate {
         Mat result = new Mat();
         src.copyTo(result);
         Imgproc.drawContours(img_threshold, contours, -1, new Scalar(255, 0, 255, 255));
-        Imgcodecs.imwrite(PATH + "draw_Contours.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "draw_Contours.jpg", img_threshold);
 
         //画出轮廓的最小外接矩形，并排除不符合要求的矩形
         List<RotatedRect> rects = new ArrayList<RotatedRect>();
@@ -120,7 +120,7 @@ public class ResLocate {
 
                 Imgproc.line(src, pt1, pt2, new Scalar(255, 255, 255, 255), 6, 8, 0);
             }
-            Imgcodecs.imwrite(PATH + "originWithContour.jpg", src);
+            //Imgcodecs.imwrite(PATH + "originWithContour.jpg", src);
 
             //旋转垂直方向的电阻
             double r = minRect.size.width / minRect.size.height;
@@ -138,7 +138,7 @@ public class ResLocate {
 
         }
 
-        Imgcodecs.imwrite(PATH + "result.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "result.jpg", img_threshold);
 
         return resultList;
     }
@@ -174,7 +174,7 @@ public class ResLocate {
     private Mat showResultMat(Mat src, Size rect_size, Point center, int index) {
         Mat img_crop = new Mat();
         Imgproc.getRectSubPix(src, rect_size, center, img_crop);
-        Imgcodecs.imwrite(PATH + "debug_crop_" + index + ".jpg", img_crop);
+        //Imgcodecs.imwrite(PATH + "debug_crop_" + index + ".jpg", img_crop);
         return img_crop;
     }
 

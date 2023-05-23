@@ -1,11 +1,11 @@
 com\lrz\resistor\CalculateRes.class
 com\lrz\resistor\ImageEdit.class
 com\lrz\resistor\ResLocate.class
-com\lrz\resistor\ColorExtract.class
-com\lrz\resistor\DeleteFile.class
 com\lrz\resistor\ResIdentify.class
-com\lrz\resistor\GetResult.class
 com\lrz\App$UploadController.class
 com\lrz\App$ImageUploadRequest.class
-com\lrz\App.class
 com\lrz\resistor\GetColorList.class
+com\lrz\resistor\ColorExtract.class
+com\lrz\resistor\DeleteFile.class
+com\lrz\resistor\GetResult.class
+com\lrz\App.class

@@ -10,40 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalculateRes {
-    public List<Double> calculateAllRes(){
+    public List<Double> calculateAllRes(List<Mat> resList){
         int iteration = 1;
         List<Double> resResult = new ArrayList<Double>();
         ResIdentify resIdentify = new ResIdentify();
-        for(int i=0;i<10;i++){
-            String path = "res/img/resistor/debug_crop_" + i + ".jpg";
-            File file = new File(path);
-            File fourthRing = new File(System.getProperty("user.dir") + "\\res\\img\\identify\\debug_crop_3.jpg");
-            File fifthRing = new File(System.getProperty("user.dir") + "\\res\\img\\identify\\debug_crop_4.jpg");
-            if(file.exists()) {
-                Mat src1 = Imgcodecs.imread(path);
-                resIdentify.resIdentify(src1,iteration);
-                int x = 0;
-                while((fifthRing.exists()||!fourthRing.exists())&&x<10){
-                    iteration+=1;
-                    resIdentify.resIdentify(src1,iteration);
-                    x++;
-                }
-                resResult.add(calculateRes());
+        for(int i=0;i<resList.size();i++){
+            List<Mat> rings = resIdentify.resIdentify(resList.get(i),iteration);
+            int x = 0;
+            while((rings.size() != 4)&&x<15){
+                iteration+=1;
+                rings = resIdentify.resIdentify(resList.get(i),iteration);
+                x++;
             }
+            resResult.add(calculateRes(rings));
         }
+        
         return resResult;
     }
 
-    public double calculateRes(){
+    public double calculateRes(List<Mat> rings){
         List<String> ringList = new ArrayList<String>();
-        for(int i=0;i<10;i++){
-            String path = "res/img/identify/debug_crop_" + i + ".jpg";
-            File file = new File(path);
-            if(file.exists()) {
-                Mat src1 = Imgcodecs.imread(path);
-                ResIdentify resIdentify = new ResIdentify();
-                ringList.add(resIdentify.getColor(src1));
-            }
+        for(int i=0;i<rings.size();i++){
+            
+            ResIdentify resIdentify = new ResIdentify();
+            ringList.add(resIdentify.getColor(rings.get(i)));
+            
         }
         System.out.println(ringList);
         //four-ring Res

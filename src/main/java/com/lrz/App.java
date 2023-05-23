@@ -58,7 +58,7 @@ public class App {
 
     @RestController
     @RequestMapping("/api")
-    @CrossOrigin(origins="http://142.189.244.40/")
+    @CrossOrigin(origins={"https://main.d3mnnisolexa6h.amplifyapp.com/", "http://142.188.193.186/", "https://www.resistorreader.ca/", "https://final.d3enmx6bxhwm18.amplifyapp.com/", "https://final.d3mnnisolexa6h.amplifyapp.com"})
     class UploadController {
         @PostMapping("/upload")
         public ResponseEntity<String> uploadImage(@RequestBody ImageUploadRequest imageUploadRequest) {
@@ -106,11 +106,11 @@ public class App {
 
         // Reduce the JPEG quality until the size is less than 1MB
         int quality = 100;
-        while (matOfByte.toArray().length > 300000 && quality > 0) {
+        while (matOfByte.toArray().length > 800000 && quality > 0) {
             matOfByte = new MatOfByte();
             MatOfInt params = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, quality);
             Imgcodecs.imencode(".jpeg", mat, matOfByte, params);
-            quality -= 10;
+            quality -= 4;
         }
 
         byte[] byteArray = matOfByte.toArray();
@@ -120,6 +120,7 @@ public class App {
     
 
     public static BufferedImage matToBufferedImage(Mat mat){
+        mat = compressMat(mat);
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if (mat.channels() > 1){
             type = BufferedImage.TYPE_3BYTE_BGR;

@@ -23,7 +23,7 @@ public class ImageEdit {
             Imgproc.putText(src,String.valueOf(resistance.get(i))+" ohm",pt,font, fontScale, color_back, thickness+5);
             Imgproc.putText(src,String.valueOf(resistance.get(i))+" ohm",pt,font, fontScale, color_word, thickness);
         }
-        Imgcodecs.imwrite(PATH , src);
+        
         return src;
     }
 }

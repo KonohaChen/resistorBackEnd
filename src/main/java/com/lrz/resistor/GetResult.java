@@ -18,11 +18,12 @@ public class GetResult {
         //定位电阻
         List<RotatedRect> rectLoc = new ArrayList<>();
         ResLocate resLocate = new ResLocate();
-        resLocate.resLocate(image,rectLoc);
+        List<Mat> resList = resLocate.resLocate(image,rectLoc);
+        
 
         CalculateRes calculateRes = new CalculateRes();
         List<Double> resistance;
-        resistance = calculateRes.calculateAllRes();
+        resistance = calculateRes.calculateAllRes(resList);
 
         //编辑图片
         ImageEdit imageEdit = new ImageEdit();

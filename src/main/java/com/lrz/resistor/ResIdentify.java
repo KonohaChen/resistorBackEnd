@@ -20,16 +20,14 @@ public class ResIdentify {
 
     private static final String PATH = System.getProperty("user.dir") + "\\res\\img\\identify\\";
     private static int erodeSizeX0 = 3;
-    private static int erodeSizeY0 = 8;   //纵向腐蚀
-    private static int erodeSizeX = 4;
-    private static int erodeSizeY = 1000;   //纵向腐蚀
-
-    //色环BGR值，待测
-    private static Scalar[] colorCode = {
-    };
+    private static int erodeSizeY0 = 8;   //腐蚀阴影
+    private static int morphDilateSizeX = 1;
+    private static int morphDilateSizeY = 4;
+    private static int erodeSizeX = 3;
+    private static int erodeSizeY = 1000;   //扩大色环
 
 
-    public int resIdentify(Mat src,int iteration) {
+    public List<Mat> resIdentify(Mat src,int iteration) {
 
         //删除历史文件
         File file = new File(System.getProperty("user.dir") + "\\res\\img\\identify");
@@ -41,45 +39,51 @@ public class ResIdentify {
         //中值滤波
         Mat src_medblur = new Mat();
         Imgproc.medianBlur(src, src_medblur, 3);
-        Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
+        //Imgcodecs.imwrite(PATH + "src_medblur.jpg", src_medblur);
 
         // 高斯模糊
         Mat src_blur = new Mat();
         Imgproc.GaussianBlur(src_medblur, src_blur, new Size(5, 5), 0, 0, 4);
-        Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
+        //Imgcodecs.imwrite(PATH + "src_blur.jpg", src_blur);
 
 
         // 灰度化
         Mat src_gray = new Mat();
         Imgproc.cvtColor(src_blur, src_gray, Imgproc.COLOR_BGR2GRAY);
 
-        Imgcodecs.imwrite(PATH + "gray.jpg", src_gray);
+        //Imgcodecs.imwrite(PATH + "gray.jpg", src_gray);
 
 
         // 二值化
         Mat img_threshold = new Mat();
         Imgproc.threshold(src_gray, img_threshold, 0, 255, Imgproc.THRESH_OTSU);
 
-        Imgcodecs.imwrite(PATH + "threshold.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "threshold.jpg", img_threshold);
 
         //尝试消除阴影导致的误判
-        Core.bitwise_not(img_threshold, img_threshold);
-        Mat element0 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(erodeSizeX0, erodeSizeY0));
-        Imgproc.erode(img_threshold, img_threshold, element0, new Point(-1, -1), iteration);
-        Core.bitwise_not(img_threshold, img_threshold);
+        for(int i = iteration; i >0; i--){
+            Core.bitwise_not(img_threshold, img_threshold);
+            Mat element0 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(erodeSizeX0, erodeSizeY0));
+            Imgproc.erode(img_threshold, img_threshold, element0, new Point(-1, -1), 1);
+            Mat element1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphDilateSizeX, morphDilateSizeY));
+            Imgproc.morphologyEx(img_threshold, img_threshold, Imgproc.MORPH_DILATE, element1);
+            //Imgcodecs.imwrite(PATH + "morphology_dilate.jpg", img_threshold);
+            Core.bitwise_not(img_threshold, img_threshold);
+        }
+        
 
-        Imgcodecs.imwrite(PATH + "threshold0.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "threshold0.jpg", img_threshold);
 
-        // 纵向腐蚀，连接色环反光断点,腐蚀两次
+        // 纵向腐蚀，连接色环反光断点,腐蚀
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(erodeSizeX, erodeSizeY));
         Imgproc.erode(img_threshold, img_threshold, element, new Point(-1, -1), 1);
 
-        Imgcodecs.imwrite(PATH + "MORPH_RECT.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "MORPH_RECT.jpg", img_threshold);
 
         //反色
         Core.bitwise_not(img_threshold, img_threshold);
 
-        Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
 
         // 求所有轮廓
         Mat hierarchy = new Mat();
@@ -90,7 +94,7 @@ public class ResIdentify {
         // 画出轮廓
         Imgproc.drawContours(img_threshold, contours, -1, new Scalar(255, 0, 255, 255));
 
-        Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
+        //Imgcodecs.imwrite(PATH + "bitwise.jpg", img_threshold);
 
         // 画出轮廓的最小外接矩形
         List<RotatedRect> rects = new ArrayList<RotatedRect>();
@@ -101,6 +105,7 @@ public class ResIdentify {
             rects.add(mr);
         }
 
+        List<Mat> resList = new ArrayList<Mat>();
         for (int i = 0; i < contours.size(); i++) {
             RotatedRect minRect = rects.get(i);
             Point[] rect_points = new Point[4];
@@ -127,17 +132,18 @@ public class ResIdentify {
 
             //色环图像
             Mat colorBandMat = showResultMat(img_rotated, size, minRect.center, i);
+            resList.add(colorBandMat);
         }
 
+        //System.out.println(contours.size());
 
-
-        return 0;
+        return resList;
     }
 
     private Mat showResultMat(Mat src, Size rect_size, Point center, int index) {
         Mat img_crop = new Mat();
         Imgproc.getRectSubPix(src, rect_size, center, img_crop);
-        Imgcodecs.imwrite(PATH + "debug_crop_" + index + ".jpg", img_crop);
+        //Imgcodecs.imwrite(PATH + "debug_crop_" + index + ".jpg", img_crop);
         return img_crop;
     }
 
